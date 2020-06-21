@@ -1,58 +1,71 @@
-from collections import deque
+def find_adjacentes(xVal , yVal , zVal):
+    nextPoint = 0
+    points = [[xVal - 1, yVal , zVal], [xVal + 1, yVal , zVal], [xVal, yVal - 1 , zVal], [xVal, yVal + 1 , zVal] , [xVal , yVal , zVal +1] , [xVal,yVal,zVal-1]]
 
+    for point in points:
+        if point[0]<0 or point[1]<0 or point[2]<0 or point[0]>=dungeonParameters[1] or point[1]>= dungeonParameters[2] or point[2]>= dungeonParameters[0] \
+            or levels[point[2]][point[0]][point[1]] == "#" or passedPoints[point[2]][point[0]][point[1]] == True:
+            continue
 
-def get_start_and_end(L, R, C, grid):
-    start = end = None
-    for l in range(L):
-        for r in range(R):
-            for c in range(C):
-                if grid[l][r][c] == 'S':
-                    start = (l, r, c)
-                    if end:
-                        return start, end
-                elif grid[l][r][c] == 'E':
-                    end = (l, r, c)
-                    if start:
-                        return start, end
+        passedPoints[point[2]][point[0]][point[1]] = True
+        xValues.append(point[0])
+        yValues.append(point[1])
+        zValues.append(point[2])
+        nextPoint += 1
 
-
-DIRS = ((0, 0, 1), (0, 0, -1), (0, 1, 0), (0, -1, 0), (1, 0, 0), (-1, 0, 0))
-
-
-def adj(L, R, C, grid, u):
-    l, r, c = u
-    for ld, rd, cd in DIRS:
-        nl, nr, nc = l + ld, r + rd, c + cd
-        if 0 <= nl < L and 0 <= nr < R and 0 <= nc < C and grid[nl][nr][nc] != '#':
-            yield nl, nr, nc
-
-
-def bfs(L, R, C, grid, start, end):
-    q = deque([(0, start)])
-    seen = {start}
-    while q:
-        d, u = q.pop()
-        for v in adj(L, R, C, grid, u):
-            if v in seen:
-                continue
-            if v == end:
-                return d + 1
-            q.appendleft((d + 1, v))
-            seen.add(v)
-    return None
+    return nextPoint
 
 
 
-L, R, C = [int(x) for x in input().split()]
-while L or R or C:
-    grid = []
-    for _ in range(L):
-        grid.append([input() for _ in range(R)])
+while True:
+    dungeonParameters = [int(x) for x in input().split(" ")]
+
+    if all(dungeonParameters) == 0:
+        break
+    levels = [[["." for col in range(1)] for row in range(dungeonParameters[1])] for x in range(dungeonParameters[0])]
+    passedPoints = [[[False for _ in range(dungeonParameters[2])] for z in range(dungeonParameters[1])] for x in range(dungeonParameters[0])]
+
+    for i in range(dungeonParameters[0]):
+        lev = []
+        for j in range(dungeonParameters[1]):
+            lev.append([x for x in input()])
+        levels[i] = lev
         input()
-    print(grid)
-    start, end = get_start_and_end(L, R, C, grid)
-    dist = bfs(L, R, C, grid, start, end)
-    print("Trapped!" if dist is None else "Escaped in {} minute(s).".format(dist))
 
-    L, R, C = [int(x) for x in input().split()]
+    start = [0,0,0]
+    for z in range(dungeonParameters[0]):
+        for x in range(dungeonParameters[1]):
+            for y in range(dungeonParameters[2]):
+                if levels[z][x][y] == "S":
+                    start = [x,y,z]
 
+    xValues = [start[0]]
+    yValues = [start[1]]
+    zValues = [start[2]]
+    stepCounter = 0
+    leftPoints = 1
+    nextPoints = 0
+    isComplete = False
+
+
+    while len(xValues)>0 or len(yValues)>0 or len(zValues)>0:
+
+        x = xValues.pop(0)
+        y = yValues.pop(0)
+        z = zValues.pop(0)
+
+        nextPoints += find_adjacentes(x,y,z)
+        leftPoints -= 1
+
+        if levels[z][x][y] == "E":
+            print("Escaped in {} minute(s).".format(stepCounter))
+            isComplete = True
+            break
+
+        if leftPoints == 0:
+            leftPoints = nextPoints
+            nextPoints = 0
+            stepCounter += 1
+
+    if not isComplete:
+        print("Trapped!")
