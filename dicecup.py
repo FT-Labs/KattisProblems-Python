@@ -15,6 +15,7 @@ for i in x:
 
 n = Counter(n)
 
+
 for i in n.most_common():
     if i[1] == n.most_common(1)[0][1]:
         print(i[0])
