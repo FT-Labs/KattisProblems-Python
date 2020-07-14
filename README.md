@@ -7,3 +7,5 @@ Please don't copy paste, just look at how i solved the problem then write your o
 
 
 If you don't understand the codes i write, please watch data structures and algorithm videos. I prefer Abdul Bari on youtube for algorithms, he is the best teacher you can learn competitive programming from.
+
+Also, if you prefer Kotlin as your language i solved some with Kotlin too, you can check my other repository. However normally Kotlin should be faster than Python because it is a compiled language which works with JVM, but on Kattis Python is much much faster than Kotlin. **Therefore, i recommend you to use difficulty<=3.5 Kotlin is okay, but if you are going to try harder problems >3.5, use Python or C++.*
