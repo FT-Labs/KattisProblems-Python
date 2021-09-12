@@ -1,0 +1,11 @@
+#!/usr/bin/python
+
+import datetime
+
+
+fmt = "%H:%M:%S"
+
+start = datetime.datetime.strptime(input(), fmt)
+end = datetime.datetime.strptime(input(), fmt)
+
+print(abs(start-end))
