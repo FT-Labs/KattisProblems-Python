@@ -18,7 +18,7 @@ if __name__ == "__main__":
     while p != 0 and b != 0:
 
         if not isPrime(p):
-            if (b**p % p) == b:
+            if pow(b, p, p) == b:
                 print("yes")
             else:
                 print("no")
